@@ -7,6 +7,11 @@ name = "pypi"
 django = "*"
 install = "*"
 djangorestframework = "*"
+django-taggit = "*"
+psycopg2 = "*"
+django-ratings = "*"
+environ = "*"
+django-environ = "*"
 
 [dev-packages]
 

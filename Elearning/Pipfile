@@ -12,6 +12,9 @@ psycopg2 = "*"
 django-ratings = "*"
 environ = "*"
 django-environ = "*"
+serializers = "*"
+views = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 

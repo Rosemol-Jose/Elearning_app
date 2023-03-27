@@ -2,23 +2,20 @@ import uuid as uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from taggit.managers import TaggableManager
-from django.contrib.contenttypes.models import ContentType
-
-
-
 
 
 class User(AbstractUser):
     USER_TYPE_CHOICES = (
         (1, 'student'),
-        (2, 'teacher'),
-        (3, 'admin'),
+        (2, 'teacher')
+
     )
 
     uuid_id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     name = models.CharField(max_length=50)
     contact = models.CharField(max_length=12)
-    age = models.IntegerField()
+    age = models.IntegerField(null=True,default=1
+    )
     date_of_birth = models.DateField(null=True)
     place = models.CharField(max_length=50)
     role = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES)

@@ -154,9 +154,9 @@ class CourseEnrollView(APIView):
     def post(self, request, pk, format=None):
         course = get_object_or_404(Course, pk=pk)
 
-        if User.role == 'Student':
-            course.studentcourses.add(request.user)
-            return Response({'enrolled': True})
+        # if User.role == 'Student':
+        #     course.studentcourses.add(request.user)
+        #     return Response({'enrolled': True})
 
 
 

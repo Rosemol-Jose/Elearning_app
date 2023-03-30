@@ -18,7 +18,7 @@ class User(AbstractUser):
     )
     date_of_birth = models.DateField(null=True)
     place = models.CharField(max_length=50)
-    role = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES)
+    role = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES,default=1)
     is_subscribed = models.BooleanField(default=False)
 
 
@@ -26,7 +26,7 @@ class Teacher(models.Model):
     uuid_id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     specialization = models.TextField(max_length=100)
     user = models.ForeignKey(User, related_name='app_teachers', on_delete=models.CASCADE)
-    skill_tags = TaggableManager()
+    skill_tags = TaggableManager(blank=True)
 
 
 class Student(models.Model):
@@ -41,7 +41,7 @@ class Course(models.Model):
     duration = models.DurationField(default=1)
     added_by = models.ForeignKey(Teacher, related_name='app_courses',on_delete=models.CASCADE)
     # On clicking the particular tag, There will come a list of all the posts associated with that particular tag.
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
 
 
 class Module(models.Model):

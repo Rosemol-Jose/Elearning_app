@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from LearnApp.models import User, Content, Module, Student, Teacher, Course, StudentModule
+from LearnApp.models import User, Content, Module, Student, Teacher, Course, StudentModule, StudentCourse
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -16,7 +16,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["username", "email", "password", "password2"]
+        fields = "__all__"
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
@@ -35,14 +35,14 @@ class UserCreateSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-class ItemSerializer(serializers.HyperlinkedModelSerializer):
-    pass
+
 
 class ContentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Content
         fields = ('module', 'item',)
+
 class ModuleSerializer(serializers.ModelSerializer):
     contents = ContentSerializer(many=True)
 
@@ -55,7 +55,7 @@ class StudentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Student
-        fields = ('uuid_id', 'title', '',)
+        fields ='__all__'
 
 
 class TeacherSerializer(serializers.ModelSerializer):
@@ -70,4 +70,9 @@ class StudentModuleSerializer(serializers.ModelSerializer):
     class Meta:
         model=StudentModule
         fields = '__all__'
+class StudentCourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=StudentCourse
+        fields='__all__'
+
 

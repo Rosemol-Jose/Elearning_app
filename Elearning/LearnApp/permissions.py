@@ -3,7 +3,7 @@ from rest_framework.permissions import BasePermission
 from LearnApp.models import User
 
 
-class StudentPermissions(BasePermission):
+class IsStudent(BasePermission):
 
     permissions=False
     def has_permission(self, request, view):
@@ -13,7 +13,7 @@ class StudentPermissions(BasePermission):
         return permissions
 
 
-class TeacherPermissions(BasePermission):
+class IsTeacher(BasePermission):
 
     permissions=False
     def has_permission(self, request, view):

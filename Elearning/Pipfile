@@ -15,6 +15,9 @@ django-environ = "*"
 serializers = "*"
 views = "*"
 djangorestframework-simplejwt = "*"
+django-rest-swagger = "*"
+django-filter = "*"
+drf-yasg = "*"
 
 [dev-packages]
 

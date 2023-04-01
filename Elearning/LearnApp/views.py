@@ -77,6 +77,10 @@ class TeacherList(APIView):
         teachers = Teacher.objects.all()
         serializers = TeacherSerializer(teachers, many=True)
         pagination_class = PageNumberPagination
+        filter_fields = (
+            'specialization',
+            'skill_tags',
+        )
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -124,6 +128,7 @@ class TeacherDetail(APIView):
             return Response({"Error": "TeacherID: {} does not exist".format(pk)}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserProfileListCreateView(ListCreateAPIView):
+    "Creating a user , specifying role"
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -133,11 +138,16 @@ class UserProfileListCreateView(ListCreateAPIView):
 
 
 class CourseList(APIView):
+    "List of courses with filter on tags and title"
 
     def get(self, request):
         courses = Course.objects.all()
         serializer = CourseSerializer(courses, many=True)
         pagination_class = PageNumberPagination
+        filter_fields = (
+            'title',
+            'tags',
+        )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -149,6 +159,7 @@ class CourseList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class StudeCourseDetail(APIView):
+    "CRUD operations regarding a student-course"
     def get_object(self, pk):
         try:
             return StudentCourse.objects.get(pk=pk)
@@ -181,6 +192,7 @@ class StudeCourseDetail(APIView):
             return Response({"Error": "The studentcourse ID {} does not exist".format(pk)}, status=status.HTTP_400_BAD_REQUEST)
 
 class StudentModuleDetail(APIView):
+    "CRUD operations regarding a student-module"
     def get_object(self, pk):
         try:
             return StudentModule.objects.get(pk=pk)
@@ -215,7 +227,8 @@ class StudentModuleDetail(APIView):
 
 
 
-class UpdateCourse(APIView):
+class UpdateCompletionStatus(APIView):
+    "For updating completion status according to the progress of a course for a student id"
     def get_object(self, pk):
         try:
             return Student.objects.get(pk=pk)
@@ -241,6 +254,7 @@ class UpdateCourse(APIView):
 @decorators.api_view(["POST"])
 @decorators.permission_classes([permissions.AllowAny])
 def registration(request):
+    "For registering a user using jwt authentication"
     serializer = UserCreateSerializer(data=request.data)
     if not serializer.is_valid():
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -256,8 +270,7 @@ def registration(request):
 
 
 
-class UserLogin(ObtainAuthToken):
-    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+
 
 
 

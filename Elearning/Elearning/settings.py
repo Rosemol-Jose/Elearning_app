@@ -46,13 +46,16 @@ BASE_APPS = [
     'django.contrib.staticfiles'
 
 ]
-LOCAL_APPS=['rest_framework',
+OTHER_APPS=['rest_framework',
+
+   'drf_yasg',
+'django_filters',
     'taggit',
     'environ',
     'LearnApp']
 
 AUTH_USER_MODEL = 'LearnApp.User'
-INSTALLED_APPS=LOCAL_APPS+BASE_APPS
+INSTALLED_APPS=OTHER_APPS+BASE_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -143,8 +146,10 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
-    # 'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication'],
+    'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema',
 
-    ]}
+
+    }

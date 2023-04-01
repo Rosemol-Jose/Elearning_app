@@ -1,20 +1,18 @@
-from django.shortcuts import render
-from django.core.paginator import Paginator
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import action, api_view
+from rest_framework_simplejwt.settings import api_settings
 
-from .permissions import IsTeacher
 from .serializers import StudentSerializer, TeacherSerializer, UserSerializer, CourseSerializer, ContentSerializer, \
-    StudentCourseSerializer
+    StudentCourseSerializer, UserCreateSerializer
 from .models import Student, Teacher, User, Course, StudentCourse, StudentModule
 from rest_framework.authentication import BasicAuthentication
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, viewsets
-from rest_framework import status
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework import status,permissions,decorators
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
+from rest_framework_simplejwt.tokens import RefreshToken
 # Create your views here.
 
 class StudentList(APIView):
@@ -240,8 +238,26 @@ class UpdateCourse(APIView):
         except :
             return Response("Student does not exist.", status=status.HTTP_400_BAD_REQUEST)
 
+@decorators.api_view(["POST"])
+@decorators.permission_classes([permissions.AllowAny])
+def registration(request):
+    serializer = UserCreateSerializer(data=request.data)
+    if not serializer.is_valid():
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+    user = serializer.save()
+    refresh = RefreshToken.for_user(user)
+    res = {
+        "refresh": str(refresh),
+        "access": str(refresh.access_token),
+    }
+    return Response(res, status.HTTP_201_CREATED)
 
 
+
+
+
+class UserLogin(ObtainAuthToken):
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
 
 
 

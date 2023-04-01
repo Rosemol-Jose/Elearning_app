@@ -18,6 +18,7 @@ djangorestframework-simplejwt = "*"
 django-rest-swagger = "*"
 django-filter = "*"
 drf-yasg = "*"
+django-model-reviews = "*"
 
 [dev-packages]
 

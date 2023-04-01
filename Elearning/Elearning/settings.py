@@ -13,15 +13,14 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 
 import environ
+
 env = environ.Env()
 
 # reading .env file
 environ.Env.read_env()
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -34,7 +33,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 BASE_APPS = [
@@ -46,16 +44,15 @@ BASE_APPS = [
     'django.contrib.staticfiles'
 
 ]
-OTHER_APPS=['rest_framework',
-
-   'drf_yasg',
-'django_filters',
-    'taggit',
-    'environ',
-    'LearnApp']
+OTHER_APPS = ['rest_framework',
+              'drf_yasg',
+              'django_filters',
+              'taggit',
+              'environ',
+              'LearnApp']
 
 AUTH_USER_MODEL = 'LearnApp.User'
-INSTALLED_APPS=OTHER_APPS+BASE_APPS
+INSTALLED_APPS = OTHER_APPS + BASE_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -87,7 +84,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Elearning.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -95,15 +91,13 @@ WSGI_APPLICATION = 'Elearning.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME':env('NAME'),
-        'USER':env('USER'),
-        'PASSWORD':env('PASSWORD'),
+        'NAME': env('NAME'),
+        'USER': env('USER'),
+        'PASSWORD': env('PASSWORD'),
         'HOST': env('HOST'),
         'PORT': env('PORT')
     }
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -123,7 +117,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -134,7 +127,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -149,7 +141,6 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication'],
-    'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 
-
-    }
+}

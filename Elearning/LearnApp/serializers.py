@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from LearnApp.models import User, Content, Module, Student, Teacher, Course, StudentModule, StudentCourse
+from LearnApp.models import User, Content, Module, Student, Teacher, Course, StudentModule, StudentCourse, Review
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -74,5 +74,8 @@ class StudentCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model=StudentCourse
         fields='__all__'
-
+class  ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Review
+        fields='__all__'
 

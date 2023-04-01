@@ -1,17 +1,13 @@
-from rest_framework_simplejwt.settings import api_settings
-
+from .permissions import IsOwner
 from .serializers import StudentSerializer, TeacherSerializer, UserSerializer, CourseSerializer, ContentSerializer, \
-    StudentCourseSerializer, UserCreateSerializer
-from .models import Student, Teacher, User, Course, StudentCourse, StudentModule
-from rest_framework.authentication import BasicAuthentication
-from django.shortcuts import get_object_or_404
-from rest_framework import generics, viewsets
-from rest_framework.authtoken.views import ObtainAuthToken
+    StudentCourseSerializer, UserCreateSerializer, ReviewSerializer
+from .models import Student, Teacher, User, Course, StudentCourse, StudentModule, Review
+from rest_framework.viewsets import ModelViewSet
 from rest_framework import status,permissions,decorators
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
+from rest_framework.generics import ListCreateAPIView
 from rest_framework_simplejwt.tokens import RefreshToken
 # Create your views here.
 
@@ -251,6 +247,26 @@ class UpdateCompletionStatus(APIView):
         except :
             return Response("Student does not exist.", status=status.HTTP_400_BAD_REQUEST)
 
+
+
+
+
+class ReviewList(APIView):
+    def get(self, request):
+        teachers = Review.objects.all()
+        serializers = ReviewSerializer(teachers, many=True)
+        pagination_class = PageNumberPagination
+        filter_fields = (
+            'student',
+            'course',
+        )
+        return Response(serializers.data, status=status.HTTP_200_OK)
+    def post(self, request):
+        serializer = ReviewSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 @decorators.api_view(["POST"])
 @decorators.permission_classes([permissions.AllowAny])
 def registration(request):

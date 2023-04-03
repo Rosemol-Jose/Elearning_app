@@ -14,11 +14,11 @@ class User(AbstractUser):
     uuid_id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     name = models.CharField(max_length=50)
     contact = models.CharField(max_length=12)
-    age = models.IntegerField(null=True,default=1
-    )
+    age = models.IntegerField(null=True, default=1
+                              )
     date_of_birth = models.DateField(null=True)
     place = models.CharField(max_length=50)
-    role = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES,default=1)
+    role = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, default=1)
     is_subscribed = models.BooleanField(default=False)
 
 
@@ -39,7 +39,7 @@ class Course(models.Model):
     uuid_id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     title = models.TextField(max_length=50)
     duration = models.DurationField(default=1)
-    added_by = models.ForeignKey(Teacher, related_name='app_courses',on_delete=models.CASCADE)
+    added_by = models.ForeignKey(Teacher, related_name='app_courses', on_delete=models.CASCADE)
     # On clicking the particular tag, There will come a list of all the posts associated with that particular tag.
     tags = TaggableManager(blank=True)
 
@@ -64,7 +64,7 @@ class Content(models.Model):
     uuid_id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     module = models.ForeignKey(Module, related_name='app_contents', on_delete=models.CASCADE)
     content_type = models.PositiveSmallIntegerField(choices=CHOICES)
-    item=models.URLField(max_length = 200)
+    item = models.URLField(max_length=200)
     created_date = models.DateTimeField(auto_now_add=True)
 
 

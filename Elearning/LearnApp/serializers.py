@@ -8,6 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
 
+
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, style={
         "input_type": "Password"})
@@ -36,46 +37,51 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return user
 
 
-
 class ContentSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Content
         fields = ('module', 'item',)
+
 
 class ModuleSerializer(serializers.ModelSerializer):
     contents = ContentSerializer(many=True)
 
     class Meta:
         model = Module
-        fields = ('course', 'title', 'description', 'module_num','created_date','contents',)
+        fields = ('course', 'title', 'description', 'module_num', 'created_date', 'contents',)
 
 
 class StudentSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Student
-        fields ='__all__'
+        fields = '__all__'
 
 
 class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teacher
         fields = '__all__'
+
+
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
-        model=Course
-        fields='__all__'
+        model = Course
+        fields = '__all__'
+
+
 class StudentModuleSerializer(serializers.ModelSerializer):
     class Meta:
-        model=StudentModule
+        model = StudentModule
         fields = '__all__'
+
+
 class StudentCourseSerializer(serializers.ModelSerializer):
     class Meta:
-        model=StudentCourse
-        fields='__all__'
-class  ReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Review
-        fields='__all__'
+        model = StudentCourse
+        fields = '__all__'
 
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = '__all__'

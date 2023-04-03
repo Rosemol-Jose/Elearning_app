@@ -1,14 +1,16 @@
-from .permissions import IsOwner
+from .permissions import IsOwner, IsTeacher
 from .serializers import StudentSerializer, TeacherSerializer, UserSerializer, CourseSerializer, ContentSerializer, \
     StudentCourseSerializer, UserCreateSerializer, ReviewSerializer
 from .models import Student, Teacher, User, Course, StudentCourse, StudentModule, Review
 from rest_framework.viewsets import ModelViewSet
-from rest_framework import status,permissions,decorators
+from rest_framework import status, permissions, decorators
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import ListCreateAPIView
 from rest_framework_simplejwt.tokens import RefreshToken
+
+
 # Create your views here.
 
 class StudentList(APIView):
@@ -57,8 +59,6 @@ class StudentDetail(APIView):
     def delete(self, request, pk):
 
         student = self.get_object(pk)
-        # student.studentcourses.delete()
-        # student.studentmodules.delete()
         student.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -97,6 +97,7 @@ class TeacherDetail(APIView):
             return Teacher.objects.get(pk=pk)
         except Student.DoesNotExist:
             return Response("Student does not exist.", status=status.HTTP_400_BAD_REQUEST)
+
     def get(self, request, pk):
         try:
             teacher = self.get_object(pk=pk)
@@ -123,6 +124,7 @@ class TeacherDetail(APIView):
         except:
             return Response({"Error": "TeacherID: {} does not exist".format(pk)}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class UserProfileListCreateView(ListCreateAPIView):
     "Creating a user , specifying role"
     queryset = User.objects.all()
@@ -146,21 +148,24 @@ class CourseList(APIView):
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
     def post(self, request):
         serializer = CourseSerializer(data=request.data)
+        permission_classes= [IsTeacher]
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class StudeCourseDetail(APIView):
     "CRUD operations regarding a student-course"
+
     def get_object(self, pk):
         try:
             return StudentCourse.objects.get(pk=pk)
         except Student.DoesNotExist:
             return Response("Does not exist.", status=status.HTTP_400_BAD_REQUEST)
+
     def get(self, request, pk):
         try:
             studentcourse = self.get_object(pk=pk)
@@ -171,7 +176,7 @@ class StudeCourseDetail(APIView):
 
     def put(self, request, pk):
         try:
-            studentcourse= self.get_object(pk)
+            studentcourse = self.get_object(pk)
             serializer = StudentCourseSerializer(studentcourse, data=request.data)
             if serializer.is_valid():
                 serializer.save()
@@ -180,20 +185,25 @@ class StudeCourseDetail(APIView):
             return Response({"Error": "ID: {} does not exist".format(pk)}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
+        permission_classes = [IsTeacher]
         try:
             studentcourse = self.get_object(pk=pk)
             studentcourse.delete()
             return Response({"Success": "The studentcourse table is deleted."}, status=status.HTTP_200_OK)
         except:
-            return Response({"Error": "The studentcourse ID {} does not exist".format(pk)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"Error": "The studentcourse ID {} does not exist".format(pk)},
+                            status=status.HTTP_400_BAD_REQUEST)
+
 
 class StudentModuleDetail(APIView):
     "CRUD operations regarding a student-module"
+
     def get_object(self, pk):
         try:
             return StudentModule.objects.get(pk=pk)
         except Student.DoesNotExist:
             return Response("Does not exist.", status=status.HTTP_400_BAD_REQUEST)
+
     def get(self, request, pk):
         try:
             studentmodule = self.get_object(pk=pk)
@@ -204,7 +214,7 @@ class StudentModuleDetail(APIView):
 
     def put(self, request, pk):
         try:
-            studentmodule= self.get_object(pk)
+            studentmodule = self.get_object(pk)
 
             serializer = StudentCourseSerializer(studentmodule, data=request.data)
             if serializer.is_valid():
@@ -214,17 +224,19 @@ class StudentModuleDetail(APIView):
             return Response({"Error": "ID: {} does not exist".format(pk)}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
+        permission_classes = [IsTeacher]
         try:
             studentcourse = self.get_object(pk=pk)
             studentcourse.delete()
             return Response({"Success": "The studentmodule table is deleted."}, status=status.HTTP_200_OK)
         except:
-            return Response({"Error": "The studentmodule ID {} does not exist".format(pk)}, status=status.HTTP_400_BAD_REQUEST)
-
+            return Response({"Error": "The studentmodule ID {} does not exist".format(pk)},
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
 class UpdateCompletionStatus(APIView):
     "For updating completion status according to the progress of a course for a student id"
+
     def get_object(self, pk):
         try:
             return Student.objects.get(pk=pk)
@@ -234,21 +246,20 @@ class UpdateCompletionStatus(APIView):
     def get(self, request, pk):
         try:
             student = self.get_object(pk)
-            courses=student.studentcourses.all()
+            courses = student.studentcourses.all()
 
             for item in courses:
 
-                if item.progress==100:
-                    return Response({"You have successfully completed the course {}".format(item.course.title)}, status=status.HTTP_200_OK)
+                if item.progress == 100:
+                    return Response({"You have successfully completed the course {}".format(item.course.title)},
+                                    status=status.HTTP_200_OK)
                 else:
-                    return Response({"Great going; Course {} is in progress".format(item.course.title)},status=status.HTTP_200_OK)
+                    return Response({"Great going; Course {} is in progress".format(item.course.title)},
+                                    status=status.HTTP_200_OK)
 
 
-        except :
+        except:
             return Response("Student does not exist.", status=status.HTTP_400_BAD_REQUEST)
-
-
-
 
 
 class ReviewList(APIView):
@@ -261,12 +272,15 @@ class ReviewList(APIView):
             'course',
         )
         return Response(serializers.data, status=status.HTTP_200_OK)
+
     def post(self, request):
         serializer = ReviewSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 @decorators.api_view(["POST"])
 @decorators.permission_classes([permissions.AllowAny])
 def registration(request):
@@ -281,21 +295,3 @@ def registration(request):
         "access": str(refresh.access_token),
     }
     return Response(res, status.HTTP_201_CREATED)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,8 +1,7 @@
-from .permissions import IsOwner, IsTeacher
-from .serializers import StudentSerializer, TeacherSerializer, UserSerializer, CourseSerializer, ContentSerializer, \
+from .permissions import IsTeacher
+from .serializers import StudentSerializer, TeacherSerializer, UserSerializer, CourseSerializer, \
     StudentCourseSerializer, UserCreateSerializer, ReviewSerializer
 from .models import Student, Teacher, User, Course, StudentCourse, StudentModule, Review
-from rest_framework.viewsets import ModelViewSet
 from rest_framework import status, permissions, decorators
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -150,7 +149,7 @@ class CourseList(APIView):
 
     def post(self, request):
         serializer = CourseSerializer(data=request.data)
-        permission_classes= [IsTeacher]
+        permission_classes = [IsTeacher]
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -1,0 +1,26 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+install = "*"
+djangorestframework = "*"
+django-taggit = "*"
+psycopg2 = "*"
+django-ratings = "*"
+environ = "*"
+django-environ = "*"
+serializers = "*"
+views = "*"
+djangorestframework-simplejwt = "*"
+django-rest-swagger = "*"
+django-filter = "*"
+drf-yasg = "*"
+django-model-reviews = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
